@@ -1,0 +1,2 @@
+E:\Unity_3DRPGGAME\Unity_3DRPGGAME\3DRPGGame\obj\Debug\Assembly-CSharp-Editor.csprojAssemblyReference.cache
+E:\Unity_3DRPGGAME\Unity_3DRPGGAME\3DRPGGame\obj\Debug\Assembly-CSharp-Editor.csproj.CoreCompileInputs.cache
