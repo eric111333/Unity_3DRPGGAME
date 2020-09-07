@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     private Animator ani;
     private Rigidbody rig;
+    private Transform cam;
     #endregion
 
 
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         //取得文件()
         ani = GetComponent<Animator>();
         rig = GetComponent<Rigidbody>();
+        cam = GameObject.Find("攝影機跟物件").transform;
     }
     #endregion
 
@@ -40,7 +42,8 @@ public class Player : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         //Vector3 pos = new Vector3(h, 0, v); 世界座標
-        Vector3 pos = transform.forward * v + transform.right * h;
+        //Vector3 pos = transform.forward * v + transform.right * h;區域作標
+        Vector3 pos = cam.forward * -v + cam.right * -h;//攝影機座標
         rig.MovePosition(transform.position + pos*speed*Time.fixedDeltaTime);
         ani.SetFloat("move", Mathf.Abs(v) + Mathf.Abs(h));
     }
