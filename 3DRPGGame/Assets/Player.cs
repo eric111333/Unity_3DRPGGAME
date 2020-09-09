@@ -44,8 +44,15 @@ public class Player : MonoBehaviour
         //Vector3 pos = new Vector3(h, 0, v); 世界座標
         //Vector3 pos = transform.forward * v + transform.right * h;區域作標
         Vector3 pos = cam.forward * -v + cam.right * -h;//攝影機座標
-        rig.MovePosition(transform.position + pos*speed*Time.fixedDeltaTime);
+        rig.MovePosition(transform.position + pos * speed * Time.fixedDeltaTime);
         ani.SetFloat("move", Mathf.Abs(v) + Mathf.Abs(h));
+
+        if (h != 0 || v != 0)
+        {
+            Quaternion angle = Quaternion.LookRotation(pos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, angle, turn * Time.fixedDeltaTime);
+        }
+
     }
     #endregion
 
