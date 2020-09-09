@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class NPC : MonoBehaviour
 {
@@ -9,10 +10,30 @@ public class NPC : MonoBehaviour
     public GameObject panel;
     [Header("對畫名稱")]
     public Text textName;
+    [Header("對話內容")]
+    public Text textContent;
 
-    private void Type()
+    private AudioSource aud;
+    //private string 
+
+    private void Awake()
     {
+        aud = GetComponent<AudioSource>();
+    }
 
+
+    private IEnumerator Type()
+    {
+        textContent.text = "";
+
+        string dialog = data.dialogs[0];
+
+        for (int i = 0; i < dialog.Length; i++)
+        {
+            textContent.text += dialog[i];
+            aud.PlayOneShot(data.soundType, 0.5f);
+            yield return new WaitForSeconds(data.speed);
+        }
     }
 
     private void NoMission()
@@ -34,11 +55,21 @@ public class NPC : MonoBehaviour
     {
         panel.SetActive(true);
         textName.text = name;
+        StartCoroutine(Type());
     }
 
     private void DialogStop()
     {
         panel.SetActive(false);
+    }
+
+    //面向玩家
+    private void LookAtPlayer(Collider other)
+    {
+        Vector3 pos = other.transform.position;
+        pos.y = transform.position.y;
+        Quaternion angle = Quaternion.LookRotation(other.transform.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, angle, Time.deltaTime * 5);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,6 +84,13 @@ public class NPC : MonoBehaviour
         if (other.name == "player")
         {
             DialogStop();
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.name == "player")
+        {
+            LookAtPlayer(other);
         }
     }
 

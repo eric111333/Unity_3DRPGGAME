@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fa63c6e30af8e545bfe4817047f2735, type: 3}
   m_Name: "NPC \u8CC7\u6599"
   m_EditorClassIdentifier: 
-  speed: 0.5
-  soundType: {fileID: 0}
+  speed: 0.05
+  soundType: {fileID: 8300000, guid: fa4dd5977b75ef444b979afbe5c28bca, type: 3}
   count: 20
   dialogs:
   - "HI\uFF5E\u4F60\u597D\uFF01\u53EF\u4EE5\u5E6B\u6211\u6253\u5012\u524D\u9762\u7684\u9AB7\u9ACF\u982D\u54A9\uFF5E\u597D\u4E45\u6C92\u5543\u9AA8\u982D\u6839\u71AC\u9AA8\u982D\u6E6F\u4E86\uFF01\uFF5E\uFF5E\n\uFF08\uFF12\uFF10\u6839\u61C9\u8A72\u5C31\u5920\u4E86...\uFF09"

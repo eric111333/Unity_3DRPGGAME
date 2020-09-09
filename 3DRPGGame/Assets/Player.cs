@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
 
         if (h != 0 || v != 0)
         {
+            pos.y = 0;
             Quaternion angle = Quaternion.LookRotation(pos);
             transform.rotation = Quaternion.Slerp(transform.rotation, angle, turn * Time.fixedDeltaTime);
         }
