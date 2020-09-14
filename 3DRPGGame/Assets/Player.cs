@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -13,13 +14,22 @@ public class Player : MonoBehaviour
     public float hp = 250;
     [Header("魔力"), Range(0, 500)]
     public float mp = 50;
+    [Header("吃道具音效")]
+    public AudioClip soundProp;
+    [Header("任務數量")]
+    public Text eatText;
 
     public float exp;
     public int lv = 1;
+    private int count;
 
     private Animator ani;
     private Rigidbody rig;
     private Transform cam;
+    [HideInInspector]
+    public bool stop;
+    private AudioSource aud;
+    private NPC npc;
     #endregion
 
 
@@ -33,6 +43,9 @@ public class Player : MonoBehaviour
         ani = GetComponent<Animator>();
         rig = GetComponent<Rigidbody>();
         cam = GameObject.Find("攝影機跟物件").transform;
+        aud = GetComponent<AudioSource>();
+        npc = FindObjectOfType<NPC>();
+
     }
     #endregion
 
@@ -55,6 +68,15 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    private void EatProp()
+    {
+        count++;
+        eatText.text = "骷髏頭：" + count + "/" + npc.data.count;
+
+        if (count == npc.data.count) npc.Finish();
+
+    }
     #endregion
 
     /// <summary>
@@ -63,6 +85,18 @@ public class Player : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        if (stop) return;
         Move();
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "skull")
+        {
+            aud.PlayOneShot(soundProp);
+            Destroy(collision.gameObject);
+            EatProp();
+        }
+    }
+
+
 }
