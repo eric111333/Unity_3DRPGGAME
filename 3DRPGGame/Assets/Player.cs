@@ -18,10 +18,18 @@ public class Player : MonoBehaviour
     public AudioClip soundProp;
     [Header("任務數量")]
     public Text eatText;
+    [Header("Bar條")]
+    public Image barHp;
+    public Image barMp;
+    public Image barExp;
+
 
     public float exp;
     public int lv = 1;
     private int count;
+    private float maxHp;
+    private float maxMp;
+    private float maxExp;
 
     private Animator ani;
     private Rigidbody rig;
@@ -46,6 +54,8 @@ public class Player : MonoBehaviour
         aud = GetComponent<AudioSource>();
         npc = FindObjectOfType<NPC>();
 
+        maxHp = hp;
+        maxMp = mp;
     }
     #endregion
 
@@ -77,6 +87,15 @@ public class Player : MonoBehaviour
         if (count == npc.data.count) npc.Finish();
 
     }
+
+    public void Hit(float damage, Transform direction)
+    {
+        hp -= damage;
+        rig.AddForce(direction.forward * 150 + direction.up * 80);
+        barHp.fillAmount = hp / maxHp;
+        ani.SetTrigger("hit");
+    }
+
     #endregion
 
     /// <summary>

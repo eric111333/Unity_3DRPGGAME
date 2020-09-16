@@ -18,23 +18,33 @@ public class Enemy : MonoBehaviour
     public Transform skull;
     [Header("停止距離:攻擊距離"), Range(0, 10)]
     public float rangeAttack = 1.5f;
+    [Header("攻擊的冷卻時間"), Range(0, 10)]
+    public float cd = 3f;
 
     private NavMeshAgent nma;
     private Animator ani;
     private Player player;
+    private float timer;
     #endregion
 
     #region 方法
     private void Move()
     {
-
+        nma.SetDestination(player.transform.position);
         ani.SetFloat("move", nma.velocity.magnitude);
-
+        timer += Time.deltaTime;
         if (nma.remainingDistance <= rangeAttack) Attack();
     }
     private void Attack()
     {
-        ani.SetTrigger("attack");
+        
+
+        if(timer >=cd)
+        {
+            timer = 0;
+            ani.SetTrigger("attack");
+        }
+        
     }
     #endregion
 
@@ -56,6 +66,13 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = new Color(0.8f, 0, 0, 0.3f);
         Gizmos.DrawSphere(transform.position, rangeAttack);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.name == "player")
+        {
+            other.GetComponent<Player>().Hit(attack, transform);
+        }
     }
     #endregion
 
