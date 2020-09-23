@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - skull
+  - Enemy
+  - "\u751F\u6210\u9EDE"
   layers:
   - Default
   - TransparentFX

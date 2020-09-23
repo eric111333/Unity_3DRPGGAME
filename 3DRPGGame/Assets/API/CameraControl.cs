@@ -13,6 +13,10 @@ public class CameraControl : MonoBehaviour
 
     private Quaternion rot;
 
+    private void Awake()
+    {
+        Cursor.visible = false;
+    }
     /// <summary>
     /// 追蹤玩家
     /// </summary>

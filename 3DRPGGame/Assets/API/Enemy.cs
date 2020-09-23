@@ -21,9 +21,11 @@ public class Enemy : MonoBehaviour
     [Header("攻擊的冷卻時間"), Range(0, 10)]
     public float cd = 3f;
 
+
     private NavMeshAgent nma;
     private Animator ani;
     private Player player;
+    private Rigidbody rig;
     private float timer;
     #endregion
 
@@ -37,7 +39,8 @@ public class Enemy : MonoBehaviour
     }
     private void Attack()
     {
-        
+        Quaternion look = Quaternion.LookRotation(player.transform.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, look, Time.deltaTime * speed);
 
         if(timer >=cd)
         {
@@ -45,6 +48,29 @@ public class Enemy : MonoBehaviour
             ani.SetTrigger("attack");
         }
         
+    }
+    public void Hit(float damage, Transform direction)
+    {
+        hp -= damage;
+        rig.AddForce(direction.forward * 180 + direction.up * 80);
+        ani.SetTrigger("hit");
+
+        if (hp <= 0) Dead();
+    }
+    private void Dead()
+    {
+        enabled = false;
+        ani.SetBool("die", true);
+        DropProp();
+        Destroy(gameObject,1);
+    }
+    private void DropProp()
+    {
+        float r = Random.Range(0f, 1f);
+        if(r<=prop)
+        {
+            Instantiate(skull, transform.position+transform.up*1.5f, transform.rotation);
+        }
     }
     #endregion
 
@@ -54,6 +80,7 @@ public class Enemy : MonoBehaviour
         nma = GetComponent<NavMeshAgent>();
         ani = GetComponent<Animator>();
         player = FindObjectOfType<Player>();
+        rig = GetComponent<Rigidbody>();
         nma.speed = speed;
         nma.stoppingDistance = rangeAttack;
         nma.SetDestination(player.transform.position);
