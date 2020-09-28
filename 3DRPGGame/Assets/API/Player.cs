@@ -22,14 +22,22 @@ public class Player : MonoBehaviour
     public Image barHp;
     public Image barMp;
     public Image barExp;
+    public Text textLV;
+    [Header("Skill流星雨")]
+    public GameObject rock;
+    public Transform pointRock;
+    public float costRock = 20;
+    public float damageRock = 150;
+    private float cdSkill;
 
 
     public float exp;
-    public int lv = 1;
+    private int lv = 1;
     private int count;
     private float maxHp;
     private float maxMp;
     private float maxExp;
+    private float[] exps;
 
     private Animator ani;
     private Rigidbody rig;
@@ -56,6 +64,13 @@ public class Player : MonoBehaviour
 
         maxHp = hp;
         maxMp = mp;
+
+        exps = new float[99];
+
+        for (int i = 0; i < exps.Length; i++)
+        {
+            exps[i] = 100 * (i + 1);
+        }
     }
     #endregion
 
@@ -100,17 +115,62 @@ public class Player : MonoBehaviour
 
     private void Dead()
     {
-        enabled = false;     
+        enabled = false;
         ani.SetBool("die", true);
     }
 
     private void Attack()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             ani.SetTrigger("attack");
         }
     }
+
+    public void Exp(float expGet)
+    {
+        exp += expGet;
+        barExp.fillAmount = exp / maxExp;
+
+        while (exp >= maxExp) LevelUP();
+    }
+
+    public void LevelUP()
+    {
+        lv++;
+        textLV.text = "LV" + lv;
+
+        maxHp += 20;
+        maxMp += 5;
+        attack += 10;
+
+
+
+
+        hp = maxHp;
+        mp = maxMp;
+        barHp.fillAmount = 1;
+        barMp.fillAmount = 1;
+        exp -= maxExp;
+        maxExp = exps[lv - 1];
+        barExp.fillAmount = exp / maxExp;
+
+
+
+    }
+
+    private void SkillRock()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse1) && mp >= costRock && cdSkill >= 1)
+        {
+            ani.SetTrigger("skill");
+            Instantiate(rock, pointRock.position, pointRock.rotation);
+            mp -= costRock;
+            barMp.fillAmount = mp / maxMp;
+            cdSkill = 0;
+        }
+    }
+
     #endregion
 
     /// <summary>
@@ -141,6 +201,22 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Attack();
+        SkillRock();
+        Restore(mp, restoreMp, maxMp, barMp);
+        Restore(hp, restoreHp, maxHp, barHp);
+        cdSkill += Time.deltaTime;
+    }
+
+
+    [Header("回魔量/每秒")]
+    public float restoreMp = 2;
+    [Header("回血量/每秒")]
+    public float restoreHp = 5;
+    private void Restore(float value, float restore, float max, Image bar)
+    {
+        value += restore * Time.deltaTime;
+        value = Mathf.Clamp(value, 0, max);
+        bar.fillAmount = value / max;
     }
 
 }

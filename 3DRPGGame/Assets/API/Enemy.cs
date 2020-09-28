@@ -60,9 +60,13 @@ public class Enemy : MonoBehaviour
     private void Dead()
     {
         enabled = false;
+        GetComponent<Collider>().enabled = false;
         ani.SetBool("die", true);
         DropProp();
-        Destroy(gameObject,1);
+        Destroy(gameObject,3f);
+        
+        player.Exp(exp);
+        
     }
     private void DropProp()
     {
@@ -101,6 +105,15 @@ public class Enemy : MonoBehaviour
             other.GetComponent<Player>().Hit(attack, transform);
         }
     }
+    private void OnParticleCollision(GameObject other)
+    {
+        if (other.name =="碎石")
+        {
+            float damage = player.damageRock;
+            Hit(damage, player.transform);
+        }
+    }
+
     #endregion
 
 }

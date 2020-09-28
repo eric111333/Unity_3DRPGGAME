@@ -5912,7 +5912,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   turn: 5
-  attack: 500
+  attack: 30
   hp: 250
   mp: 50
   soundProp: {fileID: 8300000, guid: 7bda15db5fa2c3649ad3564898d33787, type: 3}
@@ -5920,9 +5920,15 @@ MonoBehaviour:
   barHp: {fileID: 745846709}
   barMp: {fileID: 142272257}
   barExp: {fileID: 1203670311}
+  textLV: {fileID: 1341513168}
+  rock: {fileID: 6478748205684242227, guid: dfeb0e485c72d7645b0ee329dafc82fc, type: 3}
+  pointRock: {fileID: 1551775157}
+  costRock: 15
+  damageRock: 15
   exp: 0
-  lv: 1
   stop: 0
+  restoreMp: 2
+  restoreHp: 5
 --- !u!82 &1013621502
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9301,6 +9307,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1546041162}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1551775156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1551775157}
+  m_Layer: 8
+  m_Name: "\u6280\u80FD\u751F\u6210\u4F4D\u7F6E"
+  m_TagString: Untagged
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1551775157
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551775156}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4, z: 2.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1397418583}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559747646
 GameObject:
   m_ObjectHideFlags: 0
