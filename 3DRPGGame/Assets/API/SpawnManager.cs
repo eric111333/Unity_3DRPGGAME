@@ -14,6 +14,7 @@ public class SpawnManager : MonoBehaviour
         points = GameObject.FindGameObjectsWithTag("生成點");
         InvokeRepeating("Spawn", 0, interval);
     }
+
     private void Spawn()
     {
         int r = Random.Range(0, points.Length);

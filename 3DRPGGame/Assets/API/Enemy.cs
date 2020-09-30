@@ -91,6 +91,7 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
+        if (ani.GetCurrentAnimatorStateInfo(0).IsName("zombie_attack")) return;
         Move();
     }
     private void OnDrawGizmos()

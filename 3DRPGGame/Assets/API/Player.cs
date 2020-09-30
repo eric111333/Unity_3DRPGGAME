@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class Player : MonoBehaviour
     public float mp = 50;
     [Header("吃道具音效")]
     public AudioClip soundProp;
+    public AudioClip hitclip;
+    public AudioClip attackclip;
+    public AudioClip skillclip;
     [Header("任務數量")]
     public Text eatText;
     [Header("Bar條")]
@@ -108,6 +112,7 @@ public class Player : MonoBehaviour
         hp -= damage;
         rig.AddForce(direction.forward * 150 + direction.up * 80);
         barHp.fillAmount = hp / maxHp;
+        aud.PlayOneShot(hitclip);
         ani.SetTrigger("hit");
 
         if (hp <= 0) Dead();
@@ -117,6 +122,27 @@ public class Player : MonoBehaviour
     {
         enabled = false;
         ani.SetBool("die", true);
+
+        StartCoroutine(ShowFinal());
+    }
+
+    [Header("END")]
+    public CanvasGroup final;
+    public Text textFinalTitle;
+
+    private IEnumerator ShowFinal()
+    {
+        yield return new WaitForSeconds(0.5f);
+        textFinalTitle.text = "任務失敗";
+        Cursor.visible = true;
+        final.interactable = true;
+        final.blocksRaycasts = true;
+        while (final.alpha < 1)
+        {
+            final.alpha += 0.5f * Time.deltaTime;
+            yield return null;
+        }
+
     }
 
     private void Attack()
@@ -124,6 +150,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             ani.SetTrigger("attack");
+            aud.PlayOneShot(attackclip);
         }
     }
 
@@ -164,6 +191,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1) && mp >= costRock && cdSkill >= 1)
         {
             ani.SetTrigger("skill");
+            aud.PlayOneShot(skillclip);
             Instantiate(rock, pointRock.position, pointRock.rotation);
             mp -= costRock;
             barMp.fillAmount = mp / maxMp;
@@ -180,6 +208,8 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         if (stop) return;
+        if (ani.GetCurrentAnimatorStateInfo(0).IsName("zombie_attack") || ani.GetCurrentAnimatorStateInfo(0).IsName("Skill")) return;
+
         Move();
     }
     private void OnCollisionEnter(Collision collision)
@@ -202,8 +232,8 @@ public class Player : MonoBehaviour
     {
         Attack();
         SkillRock();
-        Restore(mp, restoreMp, maxMp, barMp);
-        Restore(hp, restoreHp, maxHp, barHp);
+        Restore(ref mp, restoreMp, maxMp, barMp);
+        Restore(ref hp, restoreHp, maxHp, barHp);
         cdSkill += Time.deltaTime;
     }
 
@@ -212,7 +242,7 @@ public class Player : MonoBehaviour
     public float restoreMp = 2;
     [Header("回血量/每秒")]
     public float restoreHp = 5;
-    private void Restore(float value, float restore, float max, Image bar)
+    private void Restore(ref float value, float restore, float max, Image bar)
     {
         value += restore * Time.deltaTime;
         value = Mathf.Clamp(value, 0, max);

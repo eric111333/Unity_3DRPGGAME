@@ -14,6 +14,7 @@ public class NPC : MonoBehaviour
     public Text textContent;
     [Header("第一段對話完要顯示的物件")]
     public GameObject objectShow;
+    public GameObject spawnShow;
     [Header("任務資訊")]
     public RectTransform rectMission;
 
@@ -68,6 +69,7 @@ public class NPC : MonoBehaviour
         if (data.state != StateNPC.NOMission) return;
         data.state = StateNPC.Missioning;
         objectShow.SetActive(true);
+        spawnShow.SetActive(true);
         StartCoroutine(ShowMission());
     }
 
